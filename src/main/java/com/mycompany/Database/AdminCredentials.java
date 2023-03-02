@@ -1,0 +1,21 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.mycompany.Database;
+
+/**
+ *
+ * @author JoeAlpha
+ */
+public class AdminCredentials {
+    public static String status;      
+    public static String serial_no;   
+    public static String fullname;    
+    public static String email;       
+    public static String phone;       
+    public static String operator_id; 
+    
+    public static boolean isloggedIn = false; 
+}

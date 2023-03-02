@@ -1,0 +1,1593 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.mycompany.Admin;
+
+import com.mycompany.Database.AccessCustomer_Credentials;
+import com.mycompany.Database.AdminCredentials;
+import com.mycompany.Database.AdminPageLogout;
+import com.mycompany.Database.DBConnection;
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author JoeAlpha
+ */
+public class Page5_Customer extends javax.swing.JFrame implements Runnable {
+    SimpleDateFormat timeFormat;// setting variable for time Format
+    SimpleDateFormat dayFormat;// setting variable for day Format
+    SimpleDateFormat dateFormat;// setting variable for date Format
+    String time; // setting variable for current time
+    String day; // setting variable for day
+    String date; // setting variable for date
+    
+    
+    /**
+     * Creates new form Page2_Dashboard
+     */
+    public Page5_Customer() {
+        initComponents();
+        getRoomNo();
+        customers_table();
+
+        // center the form
+        this.setLocationRelativeTo(this);
+        
+        Thread t = new Thread(this);
+        t.start();        
+        
+        txtForSearch.setVisible(true);
+        btnSearch.setVisible(true);
+                
+        // creating button group for gender radio buttons
+        ButtonGroup bgGroup = new ButtonGroup();
+        bgGroup.add(btnMale);
+        bgGroup.add(btnFemale);
+        
+        // displaying users info
+        sideBarFname.setText(AdminCredentials.fullname);
+        sideBarOperator.setText(AdminCredentials.operator_id); 
+        topBarRegNo.setText(AdminCredentials.serial_no);
+    }
+        
+    // universal variables
+    SimpleDateFormat CheckInDate;
+    SimpleDateFormat CheckOutDate; 
+    
+    PreparedStatement sqlQueryCheck;
+    PreparedStatement sqlQueryInsert;
+    PreparedStatement sqlQueryUpdate;
+    PreparedStatement sqlQueryLogout;
+    PreparedStatement sqlQueryRoomUpdate; 
+    PreparedStatement sqlDuplicate;
+    ResultSet res;
+    Connection conn;    
+    
+    DefaultTableModel defaulttbl_1_query;
+    DefaultTableModel defaulttbl_2_view;
+    DefaultTableModel defaulttbl_3_checkout;
+    
+    private void customers_table() {
+        try {
+            conn = DBConnection.setConnection();
+            sqlQueryCheck = conn.prepareStatement("select * from tbl_customers");
+            res = sqlQueryCheck.executeQuery();
+            
+            while(res.next()) {
+                String recordId      = res.getString("id");
+                String customerName  = res.getString("fullName");
+                String customerPhone = "0"+res.getString("phone");
+                String RoomNo        = res.getString("roomNo");
+                String ChechInDay    = res.getString("checkIn");
+                String ChechOutDay   = res.getString("checkOut");
+                
+                Object[] obj = {recordId, customerName, customerPhone, RoomNo, ChechInDay, ChechOutDay};
+                
+                defaulttbl_1_query = (DefaultTableModel)tbl_customers.getModel();
+                defaulttbl_1_query.addRow(obj);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }            
+    }
+    
+    private void getRoomNo() {
+        try {
+            conn = DBConnection.setConnection();
+            sqlQueryCheck = conn.prepareStatement("select room_no from tbl_rooms");
+            ResultSet rs = sqlQueryCheck.executeQuery();
+            
+            while(rs.next()) {
+                RoomNo.addItem(rs.getString("room_no"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void clear_CheckInform() {
+        txtFullName.setText("");     // FullName
+        txtNationality.setText("");  // Nationality
+        txtEmail.setText("");        // Email
+        txtPhone.setText("");        // Phone
+        txtIdNo.setText("");         // IdNo
+        txtDuration.setText("");     // Duration
+        txtCheckIn.setDate(null);    // CheckIn 
+        txtCheckOut.setDate(null);   // CheckOut 
+        txtCost.setText("");         // Cost
+        
+        txtFullName.requestFocus();
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        topBarRegNo = new javax.swing.JLabel();
+        txtDay = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        txtTime = new javax.swing.JLabel();
+        txtDate = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbl_customers = new rojeru_san.complementos.RSTableMetro();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel12 = new javax.swing.JPanel();
+        SecondDivider = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        FirstDivider = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        btnCheckInClear = new javax.swing.JButton();
+        btnCheckInForm = new javax.swing.JButton();
+        txtIdNo = new javax.swing.JTextField();
+        txtFullName = new javax.swing.JTextField();
+        txtNationality = new javax.swing.JTextField();
+        txtPhone = new javax.swing.JTextField();
+        btnFemale = new javax.swing.JRadioButton();
+        btnMale = new javax.swing.JRadioButton();
+        txtEmail = new javax.swing.JTextField();
+        Price = new javax.swing.JComboBox<>();
+        RoomNo = new javax.swing.JComboBox<>();
+        txtCheckOut = new com.toedter.calendar.JDateChooser();
+        txtCheckIn = new com.toedter.calendar.JDateChooser();
+        txtDuration = new javax.swing.JTextField();
+        bed = new javax.swing.JComboBox<>();
+        RoomType = new javax.swing.JComboBox<>();
+        jLabel42 = new javax.swing.JLabel();
+        txtCost = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        SecondDivider1 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel43 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        jLabel47 = new javax.swing.JLabel();
+        FirstDivider1 = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel53 = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
+        jLabel55 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        detailCost = new javax.swing.JLabel();
+        detailCheckOut = new javax.swing.JLabel();
+        detailFullName = new javax.swing.JLabel();
+        detailNationality = new javax.swing.JLabel();
+        detailGender = new javax.swing.JLabel();
+        detailEmail = new javax.swing.JLabel();
+        detailRoomType = new javax.swing.JLabel();
+        detailIdNo = new javax.swing.JLabel();
+        detailRoomNo = new javax.swing.JLabel();
+        detailBed = new javax.swing.JLabel();
+        detailPhone = new javax.swing.JLabel();
+        detailCheckIn = new javax.swing.JLabel();
+        detailDuration = new javax.swing.JLabel();
+        detailPrice = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        sideBarFname = new javax.swing.JLabel();
+        sideBarOperator = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        GoToLogout = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        goToDashbord = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        goToManagers = new javax.swing.JLabel();
+        jPanel16 = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        goToSettings = new javax.swing.JLabel();
+        jPanel17 = new javax.swing.JPanel();
+        jLabel25 = new javax.swing.JLabel();
+        goToRooms = new javax.swing.JLabel();
+        jPanel18 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        goToCustomers = new javax.swing.JLabel();
+        jPanel19 = new javax.swing.JPanel();
+        jLabel27 = new javax.swing.JLabel();
+        goToReport = new javax.swing.JLabel();
+        jPanel25 = new javax.swing.JPanel();
+        btnShowAll = new javax.swing.JButton();
+        btnGoCheckIn = new javax.swing.JButton();
+        askToCheckOut = new javax.swing.JButton();
+        txtForSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JLabel();
+        btnGoView = new javax.swing.JButton();
+
+        jScrollPane1.setViewportView(jTextPane1);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.gray));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel10.setBackground(java.awt.Color.white);
+        jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel17.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 20)); // NOI18N
+        jLabel17.setText("Manage Customers");
+        jPanel10.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 220, 30));
+
+        topBarRegNo.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 13)); // NOI18N
+        jPanel10.add(topBarRegNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(105, 60, 120, 17));
+
+        txtDay.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 15)); // NOI18N
+        txtDay.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jPanel10.add(txtDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(405, 30, 100, 17));
+
+        jLabel24.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel24.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel24.setText("Serial No:");
+        jPanel10.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+
+        txtTime.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jPanel10.add(txtTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, 90, 17));
+
+        txtDate.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 15)); // NOI18N
+        txtDate.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jPanel10.add(txtDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 100, 17));
+
+        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 1, 648, 90));
+
+        jPanel11.setBackground(java.awt.Color.white);
+        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
+        tbl_customers.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "#", "Name", "Phone", "Room No", "Check In", "Check Out"
+            }
+        ));
+        tbl_customers.setColorBordeFilas(new java.awt.Color(255, 255, 255));
+        tbl_customers.setColorBordeHead(new java.awt.Color(0, 112, 192));
+        tbl_customers.setColorFilasForeground1(new java.awt.Color(0, 0, 0));
+        tbl_customers.setColorFilasForeground2(new java.awt.Color(0, 0, 0));
+        tbl_customers.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbl_customers.setFuenteFilas(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbl_customers.setFuenteFilasSelect(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbl_customers.setFuenteHead(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        tbl_customers.setGrosorBordeFilas(0);
+        tbl_customers.setGrosorBordeHead(0);
+        tbl_customers.setMultipleSeleccion(false);
+        tbl_customers.setRowHeight(25);
+        tbl_customers.setShowHorizontalLines(false);
+        tbl_customers.setShowVerticalLines(false);
+        tbl_customers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_customersMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbl_customers);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("tab1", jPanel8);
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        SecondDivider.setBackground(java.awt.SystemColor.windowBorder);
+        SecondDivider.setOpaque(true);
+        jPanel12.add(SecondDivider, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 186, 530, 1));
+
+        jLabel31.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel31.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel31.setText("Full Name:");
+        jPanel12.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+
+        jLabel30.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel30.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel30.setText("Gender:");
+        jPanel12.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, -1, -1));
+
+        jLabel36.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel36.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel36.setText("Nationality:");
+        jPanel12.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 60, -1, -1));
+
+        jLabel35.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel35.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel35.setText("ID No.");
+        jPanel12.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, -1, -1));
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel28.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel28.setText("Email Address:");
+        jPanel12.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+
+        jLabel29.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel29.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel29.setText("Phone No:");
+        jPanel12.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, -1, -1));
+
+        FirstDivider.setBackground(java.awt.SystemColor.windowBorder);
+        FirstDivider.setOpaque(true);
+        jPanel12.add(FirstDivider, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 115, 530, 1));
+
+        jLabel34.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel34.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel34.setText("Check-In:");
+        jPanel12.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
+
+        jLabel32.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel32.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel32.setText("Check-Out");
+        jPanel12.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+
+        jLabel38.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel38.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel38.setText("Duration: (in days)");
+        jPanel12.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, -1, -1));
+
+        jLabel37.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel37.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel37.setText("Price");
+        jPanel12.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, -1, -1));
+
+        jLabel39.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel39.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel39.setText("Room No:");
+        jPanel12.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
+
+        jLabel40.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel40.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel40.setText("Room Type:");
+        jPanel12.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, -1, -1));
+
+        jLabel41.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel41.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel41.setText("Bed:");
+        jPanel12.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, -1, -1));
+
+        btnCheckInClear.setText("Reset");
+        btnCheckInClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCheckInClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckInClearActionPerformed(evt);
+            }
+        });
+        jPanel12.add(btnCheckInClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 340, -1, -1));
+
+        btnCheckInForm.setBackground(java.awt.SystemColor.textHighlight);
+        btnCheckInForm.setForeground(java.awt.Color.white);
+        btnCheckInForm.setText("Check In");
+        btnCheckInForm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCheckInForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckInFormActionPerformed(evt);
+            }
+        });
+        jPanel12.add(btnCheckInForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 340, -1, -1));
+
+        txtIdNo.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jPanel12.add(txtIdNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, 150, -1));
+
+        txtFullName.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jPanel12.add(txtFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 160, -1));
+
+        txtNationality.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jPanel12.add(txtNationality, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 160, -1));
+
+        txtPhone.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jPanel12.add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 160, -1));
+
+        btnFemale.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnFemale.setText("Female");
+        btnFemale.setOpaque(false);
+        jPanel12.add(btnFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, -1, -1));
+
+        btnMale.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnMale.setSelected(true);
+        btnMale.setText("Male");
+        btnMale.setOpaque(false);
+        jPanel12.add(btnMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, -1, -1));
+
+        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jPanel12.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, -1));
+
+        Price.setOpaque(false);
+        jPanel12.add(Price, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 280, 150, -1));
+
+        RoomNo.setOpaque(false);
+        RoomNo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                RoomNoItemStateChanged(evt);
+            }
+        });
+        jPanel12.add(RoomNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 160, -1));
+        jPanel12.add(txtCheckOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 160, -1));
+        jPanel12.add(txtCheckIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 160, -1));
+
+        txtDuration.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtDuration.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDurationKeyReleased(evt);
+            }
+        });
+        jPanel12.add(txtDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, 160, -1));
+
+        bed.setOpaque(false);
+        bed.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                bedItemStateChanged(evt);
+            }
+        });
+        jPanel12.add(bed, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 150, -1));
+
+        RoomType.setOpaque(false);
+        RoomType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                RoomTypeItemStateChanged(evt);
+            }
+        });
+        jPanel12.add(RoomType, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 160, -1));
+
+        jLabel42.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jLabel42.setText("Cost:");
+        jPanel12.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 340, 35, 20));
+
+        txtCost.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jPanel12.add(txtCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, 120, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Customer Check In");
+        jPanel12.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 15, 586, 30));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 585, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel9Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 392, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel9Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jTabbedPane1.addTab("tab2", jPanel9);
+
+        jPanel13.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        SecondDivider1.setBackground(java.awt.SystemColor.windowBorder);
+        SecondDivider1.setOpaque(true);
+        jPanel14.add(SecondDivider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 186, 530, 1));
+
+        jLabel33.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel33.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel33.setText("Full Name:");
+        jPanel14.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+
+        jLabel43.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel43.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel43.setText("Gender:");
+        jPanel14.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, -1, -1));
+
+        jLabel44.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel44.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel44.setText("Nationality:");
+        jPanel14.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 60, -1, -1));
+
+        jLabel45.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel45.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel45.setText("ID No.");
+        jPanel14.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, -1, -1));
+
+        jLabel46.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel46.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel46.setText("Email Address:");
+        jPanel14.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+
+        jLabel47.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel47.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel47.setText("Phone No:");
+        jPanel14.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 130, -1, -1));
+
+        FirstDivider1.setBackground(java.awt.SystemColor.windowBorder);
+        FirstDivider1.setOpaque(true);
+        jPanel14.add(FirstDivider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 115, 530, 1));
+
+        jLabel48.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel48.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel48.setText("Check-In:");
+        jPanel14.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
+
+        jLabel49.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel49.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel49.setText("Check-Out");
+        jPanel14.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+
+        jLabel50.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel50.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel50.setText("Duration: (in days)");
+        jPanel14.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 260, -1, -1));
+
+        jLabel51.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel51.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel51.setText("Price");
+        jPanel14.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, -1, -1));
+
+        jLabel52.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel52.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel52.setText("Room No:");
+        jPanel14.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
+
+        jLabel53.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel53.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel53.setText("Room Type:");
+        jPanel14.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 200, -1, -1));
+
+        jLabel54.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel54.setForeground(java.awt.SystemColor.windowBorder);
+        jLabel54.setText("Bed:");
+        jPanel14.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, -1, -1));
+
+        jLabel55.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jLabel55.setText("Cost:");
+        jPanel14.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 340, 35, 20));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Customer Details");
+        jPanel14.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 15, 586, 30));
+
+        detailCost.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 340, 105, 20));
+
+        detailCheckOut.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailCheckOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 160, 20));
+
+        detailFullName.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 160, 20));
+
+        detailNationality.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailNationality, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 80, 150, 20));
+
+        detailGender.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, 150, 20));
+
+        detailEmail.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, 20));
+
+        detailRoomType.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailRoomType, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 220, 150, 20));
+
+        detailIdNo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailIdNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, 150, 20));
+
+        detailRoomNo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailRoomNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 160, 20));
+
+        detailBed.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailBed, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 150, 20));
+
+        detailPhone.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 150, 150, 20));
+
+        detailCheckIn.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailCheckIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 160, 20));
+
+        detailDuration.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(226, 280, 150, 20));
+
+        detailPrice.setFont(new java.awt.Font("Segoe UI Semibold", 0, 13)); // NOI18N
+        jPanel14.add(detailPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 280, 150, 20));
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 585, Short.MAX_VALUE)
+            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel13Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 392, Short.MAX_VALUE)
+            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel13Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jTabbedPane1.addTab("tab3", jPanel13);
+
+        jPanel11.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -30, 590, 420));
+
+        jPanel1.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 145, 590, 390));
+
+        jPanel2.setBackground(java.awt.SystemColor.textHighlight);
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setOpaque(false);
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel1.setText("Greens");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(88, 0, 70, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel2.setForeground(java.awt.Color.white);
+        jLabel2.setText("Milimani");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, -1, -1));
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 17, 170, -1));
+
+        jPanel4.setOpaque(false);
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        sideBarFname.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        sideBarFname.setForeground(java.awt.Color.white);
+        jPanel4.add(sideBarFname, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 1, 130, 20));
+
+        sideBarOperator.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        sideBarOperator.setForeground(java.awt.Color.white);
+        jPanel4.add(sideBarOperator, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 21, 130, 20));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/holder1.png"))); // NOI18N
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 2, 40, 40));
+
+        jLabel6.setBackground(java.awt.Color.white);
+        jLabel6.setOpaque(true);
+        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 50, 170, 1));
+
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 180, 60));
+
+        jPanel5.setBackground(java.awt.Color.white);
+        jPanel5.setOpaque(false);
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Logout.png"))); // NOI18N
+        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        GoToLogout.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        GoToLogout.setForeground(java.awt.Color.white);
+        GoToLogout.setText("Logout");
+        GoToLogout.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1));
+        GoToLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        GoToLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GoToLogoutMouseClicked(evt);
+            }
+        });
+        jPanel5.add(GoToLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 2, -1, 25));
+
+        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 150, 30));
+
+        jPanel6.setBackground(java.awt.Color.white);
+        jPanel6.setOpaque(false);
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Manager.png"))); // NOI18N
+        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        goToDashbord.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        goToDashbord.setForeground(new java.awt.Color(255, 255, 255));
+        goToDashbord.setText("Dashboard");
+        goToDashbord.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        goToDashbord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToDashbordMouseClicked(evt);
+            }
+        });
+        jPanel6.add(goToDashbord, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 5, -1, -1));
+
+        jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 150, 30));
+
+        jPanel7.setBackground(java.awt.Color.white);
+        jPanel7.setOpaque(false);
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Lecturer.png"))); // NOI18N
+        jPanel7.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        goToManagers.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        goToManagers.setForeground(new java.awt.Color(255, 255, 255));
+        goToManagers.setText("Managers");
+        goToManagers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        goToManagers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToManagersMouseClicked(evt);
+            }
+        });
+        jPanel7.add(goToManagers, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 5, -1, -1));
+
+        jPanel2.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 150, 30));
+
+        jPanel16.setBackground(java.awt.Color.white);
+        jPanel16.setOpaque(false);
+        jPanel16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/settings.png"))); // NOI18N
+        jPanel16.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        goToSettings.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        goToSettings.setForeground(new java.awt.Color(255, 255, 255));
+        goToSettings.setText("Settings");
+        goToSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        goToSettings.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToSettingsMouseClicked(evt);
+            }
+        });
+        jPanel16.add(goToSettings, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 5, -1, -1));
+
+        jPanel2.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 150, 30));
+
+        jPanel17.setBackground(java.awt.Color.white);
+        jPanel17.setOpaque(false);
+        jPanel17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/home.png"))); // NOI18N
+        jPanel17.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        goToRooms.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        goToRooms.setForeground(new java.awt.Color(255, 255, 255));
+        goToRooms.setText("Rooms");
+        goToRooms.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        goToRooms.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToRoomsMouseClicked(evt);
+            }
+        });
+        jPanel17.add(goToRooms, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 5, -1, -1));
+
+        jPanel2.add(jPanel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 150, 30));
+
+        jPanel18.setBackground(java.awt.Color.white);
+        jPanel18.setOpaque(false);
+        jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Student.png"))); // NOI18N
+        jPanel18.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        goToCustomers.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        goToCustomers.setForeground(new java.awt.Color(255, 255, 255));
+        goToCustomers.setText("Customers");
+        goToCustomers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        goToCustomers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToCustomersMouseClicked(evt);
+            }
+        });
+        jPanel18.add(goToCustomers, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 5, -1, -1));
+
+        jPanel2.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 150, 30));
+
+        jPanel19.setBackground(java.awt.Color.white);
+        jPanel19.setOpaque(false);
+        jPanel19.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/profile.png"))); // NOI18N
+        jPanel19.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 1, 30, 25));
+
+        goToReport.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        goToReport.setForeground(new java.awt.Color(255, 255, 255));
+        goToReport.setText("Report");
+        goToReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        goToReport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goToReportMouseClicked(evt);
+            }
+        });
+        jPanel19.add(goToReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 5, -1, -1));
+
+        jPanel2.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 150, 30));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 550));
+
+        jPanel25.setOpaque(false);
+        jPanel25.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnShowAll.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnShowAll.setText("Show All");
+        btnShowAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnShowAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowAllActionPerformed(evt);
+            }
+        });
+        jPanel25.add(btnShowAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 80, 30));
+
+        btnGoCheckIn.setBackground(java.awt.SystemColor.textHighlight);
+        btnGoCheckIn.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnGoCheckIn.setForeground(java.awt.Color.white);
+        btnGoCheckIn.setText("Check In");
+        btnGoCheckIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoCheckIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoCheckInActionPerformed(evt);
+            }
+        });
+        jPanel25.add(btnGoCheckIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 80, 30));
+
+        askToCheckOut.setBackground(java.awt.Color.red);
+        askToCheckOut.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        askToCheckOut.setForeground(java.awt.Color.white);
+        askToCheckOut.setText("Check Out");
+        askToCheckOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        askToCheckOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                askToCheckOutActionPerformed(evt);
+            }
+        });
+        jPanel25.add(askToCheckOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 90, 30));
+
+        txtForSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtForSearch.setForeground(java.awt.Color.gray);
+        txtForSearch.setText("search by name/room no");
+        txtForSearch.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 8, 1, 1));
+        txtForSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtForSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtForSearchFocusLost(evt);
+            }
+        });
+        jPanel25.add(txtForSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(362, 0, 200, 30));
+
+        btnSearch.setBackground(new java.awt.Color(255, 255, 255));
+        btnSearch.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
+        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSearch.setOpaque(true);
+        btnSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSearchMouseClicked(evt);
+            }
+        });
+        jPanel25.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 2, 30, 26));
+
+        btnGoView.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnGoView.setText("View");
+        btnGoView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoViewActionPerformed(evt);
+            }
+        });
+        jPanel25.add(btnGoView, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 90, 30));
+
+        jPanel1.add(jPanel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 105, 590, 32));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void GoToLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GoToLogoutMouseClicked
+        // operation for login out
+        String SerialNo = topBarRegNo.getText();
+
+        try {
+            conn = DBConnection.setConnection();
+            sqlQueryLogout = conn.prepareStatement("update tbl_admin SET status='Offline' WHERE serial_no=? ");
+            sqlQueryLogout.setString(1, SerialNo);
+
+            //if the logout is successfully the state of executeUpdate() will be 1
+            if (sqlQueryLogout.executeUpdate() != 0) {
+                // redirect to login
+                Page1_AdminLogin login = new Page1_AdminLogin();
+
+                // logout function
+                AdminPageLogout.logMeOut(this, login);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_GoToLogoutMouseClicked
+
+    private void goToDashbordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goToDashbordMouseClicked
+        // Go to dashboard
+        Page2_Dashboard dash = new Page2_Dashboard();
+        this.dispose();
+        dash.setVisible(true);
+    }//GEN-LAST:event_goToDashbordMouseClicked
+
+    private void goToManagersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goToManagersMouseClicked
+        // Go to manager
+        Page3_Manager manager = new Page3_Manager();
+        this.dispose();
+        manager.setVisible(true);
+    }//GEN-LAST:event_goToManagersMouseClicked
+
+    private void goToSettingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goToSettingsMouseClicked
+        // Go to settings
+        Page7_Settings settings = new Page7_Settings();
+        this.dispose();
+        settings.setVisible(true);
+    }//GEN-LAST:event_goToSettingsMouseClicked
+
+    private void goToRoomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goToRoomsMouseClicked
+        // Go to rooms
+        Page4_Rooms rooms = new Page4_Rooms();
+        this.dispose();
+        rooms.setVisible(true);
+    }//GEN-LAST:event_goToRoomsMouseClicked
+
+    private void goToCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goToCustomersMouseClicked
+        // Go to customers
+        Page5_Customer customers = new Page5_Customer();
+        this.dispose();
+        customers.setVisible(true);
+    }//GEN-LAST:event_goToCustomersMouseClicked
+
+    private void goToReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goToReportMouseClicked
+        // Go to report
+        Page6_Report report = new Page6_Report();
+        this.dispose();
+        report.setVisible(true);
+    }//GEN-LAST:event_goToReportMouseClicked
+
+    private void btnShowAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowAllActionPerformed
+        jTabbedPane1.setSelectedIndex(0);
+        
+        txtForSearch.setVisible(true);
+        btnSearch.setVisible(true);
+    }//GEN-LAST:event_btnShowAllActionPerformed
+
+    private void btnGoCheckInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoCheckInActionPerformed
+        jTabbedPane1.setSelectedIndex(1);
+        
+        txtForSearch.setVisible(false);
+        btnSearch.setVisible(false);
+    }//GEN-LAST:event_btnGoCheckInActionPerformed
+
+    private void askToCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_askToCheckOutActionPerformed
+        // Operation for Check Out the hotel room        
+        txtForSearch.setVisible(false);
+        btnSearch.setVisible(false);
+        
+        String fullName = detailFullName.getText();
+        String roomNo = detailRoomNo.getText();
+        
+        try {
+            defaulttbl_3_checkout = (DefaultTableModel)tbl_customers.getModel();
+            int selectIndex = tbl_customers.getSelectedRow();
+
+            int id = Integer.parseInt(defaulttbl_3_checkout.getValueAt(selectIndex, 0).toString());
+
+            // confirmation message
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Does the customer want to check out", "Warnimg", JOptionPane.YES_NO_OPTION);
+
+            if(dialogResult == JOptionPane.YES_OPTION){
+                try {
+                    conn = DBConnection.setConnection();
+                    sqlQueryCheck = conn.prepareStatement("delete from tbl_customers where id=?");
+                    sqlQueryCheck.setInt(1, id);
+                    
+                    //if account is deleted successfully 
+                    if (sqlQueryCheck.executeUpdate() != 0) {
+                        // also update the room status
+                        sqlQueryRoomUpdate = conn.prepareStatement("update tbl_rooms set status='Available' where room_no=?");
+                        sqlQueryRoomUpdate.setString(1, roomNo);
+                        sqlQueryRoomUpdate.executeUpdate();
+                        
+                        JOptionPane.showMessageDialog(null, fullName + " has checked out Successfully");
+                        
+                        customers_table();
+
+                        // refreshing the current page
+                        new Page5_Customer().setVisible(true);
+                        this.dispose();
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "No Record has been selected!", "Warnimg", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_askToCheckOutActionPerformed
+
+    private void btnGoViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoViewActionPerformed
+        jTabbedPane1.setSelectedIndex(2);
+        
+        txtForSearch.setVisible(false);
+        btnSearch.setVisible(false);
+    }//GEN-LAST:event_btnGoViewActionPerformed
+
+    private void txtForSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtForSearchFocusGained
+        // operation that occur when this field is clicked
+        if(txtForSearch.getText().trim().toLowerCase().equals("search by name/room no")){
+            txtForSearch.setText("");
+            txtForSearch.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtForSearchFocusGained
+
+    private void txtForSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtForSearchFocusLost
+        // operation that occur when this field is not clicked
+        if(txtForSearch.getText().trim().equals("") || txtForSearch.getText().trim().equals("search by name/room no")){
+            txtForSearch.setText("search by name/room no");
+            txtForSearch.setForeground(Color.gray);
+        }
+    }//GEN-LAST:event_txtForSearchFocusLost
+
+    private void btnSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseClicked
+        // function for searching specific record 
+        String NameOrRoom = txtForSearch.getText();
+
+        try { 
+            conn = DBConnection.setConnection();
+            sqlQueryCheck = conn.prepareStatement("select * from tbl_customers where fullName like '%"+NameOrRoom+"%' or roomNo like '%"+NameOrRoom+"%' ");
+            res = sqlQueryCheck.executeQuery();
+
+            DefaultTableModel model = (DefaultTableModel)tbl_customers.getModel();
+            model.setRowCount(0);
+
+            try {
+                while(res.next()) {
+                    model.addRow(new Object[]{
+                        res.getString(1),
+                        res.getString(2),
+                        res.getString(6),
+                        res.getString(8),
+                        res.getString(13),
+                        res.getString(14)
+                    });
+                }
+
+                res.close();
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+        catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE,null, ex);
+        }
+    }//GEN-LAST:event_btnSearchMouseClicked
+
+    private void btnCheckInFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckInFormActionPerformed
+        // student variables
+        String fullName    = txtFullName.getText();
+        String nationality = txtNationality.getText();
+        String gender   = "Male";
+        if(btnFemale.isSelected()) { gender  = "Female"; }
+        
+        String email    = txtEmail.getText();
+        String phone    = txtPhone.getText();
+        String idNo     = txtIdNo.getText();
+        
+        String roomNo   = RoomNo.getSelectedItem().toString();
+        String roomType = RoomType.getSelectedItem().toString();
+        String bedNo    = bed.getSelectedItem().toString();
+        String price    = Price.getSelectedItem().toString();
+        String duration = txtDuration.getText();
+        CheckInDate     = new SimpleDateFormat("YYYY-MM-dd");
+        String checkIn  = CheckInDate.format(txtCheckIn.getDate());
+        CheckOutDate    = new SimpleDateFormat("YYYY-MM-dd");
+        String checkOut = CheckOutDate.format(txtCheckOut.getDate());
+        String stayingCost = txtCost.getText();
+        
+        // checking if any field is empty before submitting the form
+        if(fullName.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "Full Name is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(nationality.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "Nationality is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(email.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "Email is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(phone.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "Phone is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(idNo.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "ID Number is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }              
+        else if(duration.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "Duration is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // how to chech the date field if its submited while empty
+        else if(txtCheckIn.getDate() == null){
+            JOptionPane.showMessageDialog(null, "check In is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(txtCheckOut.getDate() == null){
+            JOptionPane.showMessageDialog(null, "check Out is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(stayingCost.trim().equals("")){
+            JOptionPane.showMessageDialog(null, "staying Cost is required!", "Please Fill in", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else {
+            // insert the record into the database
+            try {
+                conn = DBConnection.setConnection();
+                sqlQueryCheck = conn.prepareStatement("select * from tbl_customers where roomNo=?");
+                sqlQueryCheck.setString(1, roomNo);
+                res = sqlQueryCheck.executeQuery();
+
+                if(res.isBeforeFirst()) {
+                    // if the credential already exist display error message
+                    JOptionPane.showMessageDialog(this, "These Room is booked already", "Please Choose new Room", JOptionPane.ERROR_MESSAGE);
+
+                    // clearing neccessary fields to allow the admin to re-enter new Cridentials
+                    return;
+                }else {
+                    sqlQueryInsert = conn.prepareStatement("insert into tbl_customers (fullName,nationality,gender,email,phone,idNo,roomNo,roomType,bedNo,price,duration,checkIn,checkOut,stayingCost) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+                    sqlQueryInsert.setString(1, fullName);
+                    sqlQueryInsert.setString(2, nationality);
+                    sqlQueryInsert.setString(3, gender);
+                    sqlQueryInsert.setString(4, email);
+                    sqlQueryInsert.setString(5, phone);
+                    sqlQueryInsert.setString(6, idNo);                    
+                    sqlQueryInsert.setString(7, roomNo);
+                    sqlQueryInsert.setString(8, roomType);
+                    sqlQueryInsert.setString(9, bedNo);
+                    sqlQueryInsert.setString(10, price);                    
+                    sqlQueryInsert.setString(11, duration);
+                    sqlQueryInsert.setString(12, checkIn);
+                    sqlQueryInsert.setString(13, checkOut);
+                    sqlQueryInsert.setString(14, stayingCost);
+
+                    //if the record is inserted successfully the state of executeUpdate() will be 1
+                    if (sqlQueryInsert.executeUpdate() != 0) {
+                        sqlDuplicate = conn.prepareStatement("insert into tbl_customers_records (fullName,nationality,gender,email,phone,idNo,roomNo,roomType,bedNo,price,duration,checkIn,checkOut,stayingCost) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+                        sqlDuplicate.setString(1, fullName);
+                        sqlDuplicate.setString(2, nationality);
+                        sqlDuplicate.setString(3, gender);
+                        sqlDuplicate.setString(4, email);
+                        sqlDuplicate.setString(5, phone);
+                        sqlDuplicate.setString(6, idNo);                    
+                        sqlDuplicate.setString(7, roomNo);
+                        sqlDuplicate.setString(8, roomType);
+                        sqlDuplicate.setString(9, bedNo);
+                        sqlDuplicate.setString(10, price);                    
+                        sqlDuplicate.setString(11, duration);
+                        sqlDuplicate.setString(12, checkIn);
+                        sqlDuplicate.setString(13, checkOut);
+                        sqlDuplicate.setString(14, stayingCost);
+                        
+                        
+                        //update the room from available to occupied
+                        if (sqlDuplicate.executeUpdate() != 0) {
+                            // update the room from available to occupied
+                            sqlQueryUpdate = conn.prepareStatement("update tbl_rooms SET status='Booked' WHERE room_no=? ");
+                            sqlQueryUpdate.setString(1, roomNo);
+
+                            if (sqlQueryUpdate.executeUpdate() != 0) {
+                                // Show success mesage
+                                JOptionPane.showMessageDialog(this, "New customer has checked in successfully.");
+
+                                clear_CheckInform();
+
+                                // refresh this page
+                                new Page5_Customer().setVisible(true);
+                                this.dispose();
+
+                                return;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnCheckInFormActionPerformed
+
+    private void RoomNoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_RoomNoItemStateChanged
+        // Linking Room number with Room Type
+        try {
+            conn = DBConnection.setConnection();
+            String Query = "SELECT room_type from tbl_rooms where room_no= '"+RoomNo.getSelectedItem()+"' ";
+            PreparedStatement stmt = conn.prepareStatement(Query);
+            ResultSet rs = stmt.executeQuery();
+
+            RoomType.removeAllItems();
+
+            while(rs.next()) {
+                RoomType.addItem(rs.getString("room_type"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_RoomNoItemStateChanged
+
+    private void txtDurationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDurationKeyReleased
+        // calculating cost (duration * price)
+        int priceCalculate    = Integer.parseInt(Price.getSelectedItem().toString());
+        int durationCalculate = Integer.parseInt(txtDuration.getText());
+        int total             = priceCalculate * durationCalculate;
+
+        txtCost.setText(String.valueOf(total));
+    }//GEN-LAST:event_txtDurationKeyReleased
+
+    private void bedItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_bedItemStateChanged
+        // Linking Bed with Price
+        try {
+            conn = DBConnection.setConnection();
+            String Query = "SELECT price from tbl_rooms where room_no= '"+RoomNo.getSelectedItem()+"' and room_type= '"+RoomType.getSelectedItem()+"' and bed= '"+bed.getSelectedItem()+"'";
+            PreparedStatement stmt = conn.prepareStatement(Query);
+            ResultSet rs = stmt.executeQuery();
+
+            Price.removeAllItems();
+
+            while(rs.next()) {
+                Price.addItem(rs.getString("price"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bedItemStateChanged
+
+    private void RoomTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_RoomTypeItemStateChanged
+        // Linking Room Type with Bed
+        try {
+            conn = DBConnection.setConnection();
+            String Query = "SELECT bed from tbl_rooms where room_no= '"+RoomNo.getSelectedItem()+"' and room_type= '"+RoomType.getSelectedItem()+"'";
+            PreparedStatement stmt = conn.prepareStatement(Query);
+            ResultSet rs = stmt.executeQuery();
+
+            bed.removeAllItems();
+
+            while(rs.next()) {
+                bed.addItem(rs.getString("bed"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_RoomTypeItemStateChanged
+
+    private void btnCheckInClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckInClearActionPerformed
+        clear_CheckInform();
+    }//GEN-LAST:event_btnCheckInClearActionPerformed
+
+    private void tbl_customersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_customersMouseClicked
+        
+        defaulttbl_2_view = (DefaultTableModel)tbl_customers.getModel();
+        int selectIndex = tbl_customers.getSelectedRow();
+
+        int id = Integer.parseInt(defaulttbl_2_view.getValueAt(selectIndex, 0).toString());
+
+        try {
+            conn = DBConnection.setConnection();
+            sqlQueryCheck = conn.prepareStatement("select * from tbl_customers where id=?");
+            sqlQueryCheck.setInt(1, id);
+            res = sqlQueryCheck.executeQuery();
+
+            while(res.next()) {
+                AccessCustomer_Credentials.fullName    = res.getString("fullName");
+                AccessCustomer_Credentials.nationality = res.getString("nationality");
+                AccessCustomer_Credentials.gender      = res.getString("gender");
+                AccessCustomer_Credentials.email       = res.getString("email");
+                AccessCustomer_Credentials.phone       = res.getString("phone");
+                AccessCustomer_Credentials.idNo        = res.getString("idNo");
+                AccessCustomer_Credentials.roomNo      = res.getString("roomNo");
+                AccessCustomer_Credentials.roomType    = res.getString("roomType");
+                AccessCustomer_Credentials.bedNo       = res.getString("bedNo");
+                AccessCustomer_Credentials.price       = res.getString("price");
+                AccessCustomer_Credentials.duration    = res.getString("duration");
+                AccessCustomer_Credentials.checkIn     = res.getString("checkIn");
+                AccessCustomer_Credentials.checkOut    = res.getString("checkOut");
+                AccessCustomer_Credentials.stayingCost = res.getString("stayingCost");
+            }
+                        
+            // displaying specific user info
+            detailFullName.setText(AccessCustomer_Credentials.fullName);
+            detailNationality.setText(AccessCustomer_Credentials.nationality);
+            detailGender.setText(AccessCustomer_Credentials.gender);
+            detailEmail.setText(AccessCustomer_Credentials.email);
+            detailPhone.setText("0"+AccessCustomer_Credentials.phone);
+            detailIdNo.setText(AccessCustomer_Credentials.idNo);
+            detailRoomNo.setText(AccessCustomer_Credentials.roomNo);
+            detailRoomType.setText(AccessCustomer_Credentials.roomType);
+            detailBed.setText(AccessCustomer_Credentials.bedNo);
+            detailCheckIn.setText(AccessCustomer_Credentials.checkIn);
+            detailDuration.setText(AccessCustomer_Credentials.duration);
+            detailPrice.setText(AccessCustomer_Credentials.price);
+            detailCheckOut.setText(AccessCustomer_Credentials.checkOut);
+            detailCost.setText(AccessCustomer_Credentials.stayingCost);
+        } catch (Exception ex) {
+            Logger.getLogger(Page5_Customer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_tbl_customersMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Page5_Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Page5_Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Page5_Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Page5_Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Page5_Customer().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel FirstDivider;
+    private javax.swing.JLabel FirstDivider1;
+    private javax.swing.JLabel GoToLogout;
+    private javax.swing.JComboBox<String> Price;
+    private javax.swing.JComboBox<String> RoomNo;
+    private javax.swing.JComboBox<String> RoomType;
+    private javax.swing.JLabel SecondDivider;
+    private javax.swing.JLabel SecondDivider1;
+    private javax.swing.JButton askToCheckOut;
+    private javax.swing.JComboBox<String> bed;
+    private javax.swing.JButton btnCheckInClear;
+    private javax.swing.JButton btnCheckInForm;
+    private javax.swing.JRadioButton btnFemale;
+    private javax.swing.JButton btnGoCheckIn;
+    private javax.swing.JButton btnGoView;
+    private javax.swing.JRadioButton btnMale;
+    private javax.swing.JLabel btnSearch;
+    private javax.swing.JButton btnShowAll;
+    private javax.swing.JLabel detailBed;
+    private javax.swing.JLabel detailCheckIn;
+    private javax.swing.JLabel detailCheckOut;
+    private javax.swing.JLabel detailCost;
+    private javax.swing.JLabel detailDuration;
+    private javax.swing.JLabel detailEmail;
+    private javax.swing.JLabel detailFullName;
+    private javax.swing.JLabel detailGender;
+    private javax.swing.JLabel detailIdNo;
+    private javax.swing.JLabel detailNationality;
+    private javax.swing.JLabel detailPhone;
+    private javax.swing.JLabel detailPrice;
+    private javax.swing.JLabel detailRoomNo;
+    private javax.swing.JLabel detailRoomType;
+    private javax.swing.JLabel goToCustomers;
+    private javax.swing.JLabel goToDashbord;
+    private javax.swing.JLabel goToManagers;
+    private javax.swing.JLabel goToReport;
+    private javax.swing.JLabel goToRooms;
+    private javax.swing.JLabel goToSettings;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JLabel sideBarFname;
+    private javax.swing.JLabel sideBarOperator;
+    private rojeru_san.complementos.RSTableMetro tbl_customers;
+    private javax.swing.JLabel topBarRegNo;
+    private com.toedter.calendar.JDateChooser txtCheckIn;
+    private com.toedter.calendar.JDateChooser txtCheckOut;
+    private javax.swing.JTextField txtCost;
+    private javax.swing.JLabel txtDate;
+    private javax.swing.JLabel txtDay;
+    private javax.swing.JTextField txtDuration;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtForSearch;
+    private javax.swing.JTextField txtFullName;
+    private javax.swing.JTextField txtIdNo;
+    private javax.swing.JTextField txtNationality;
+    private javax.swing.JTextField txtPhone;
+    private javax.swing.JLabel txtTime;
+    // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+        while(true) {
+            try {
+                timeFormat = new SimpleDateFormat("hh:mm:ss a");
+                time = timeFormat.format(Calendar.getInstance().getTime());
+                txtTime.setText(time);
+
+                dayFormat = new SimpleDateFormat("EEEE");
+                day = dayFormat.format(Calendar.getInstance().getTime());
+                txtDay.setText(day);
+
+                dateFormat = new SimpleDateFormat("dd MMM yyyy"); // setting the time
+                date = dateFormat.format(Calendar.getInstance().getTime());// getting current date
+                txtDate.setText(date);// displaying the date to the user
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
